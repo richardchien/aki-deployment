@@ -1,7 +1,5 @@
 from config_base import *
 
-HOST = '0.0.0.0'
-PORT = 8080
 ACCESS_TOKEN = 'BC9OhELAb0NJvjoqiXm6'
 DEBUG = False
 ENABLE_HTTP_POST = False
