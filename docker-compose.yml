@@ -11,8 +11,6 @@ services:
       - db:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: bMmsDmrJP9hgCNH7hECy
-      POSTGRES_USER: amadeus  # 历史原因，数据库和用户名没有改名
-      POSTGRES_DB: amadeus
     ports:
       - 15000:5432
     restart: always
@@ -45,7 +43,7 @@ services:
     restart: always
 
   coolq:
-    image: richardchien/cqhttp:4.7.0
+    image: richardchien/cqhttp:4.7.1
     depends_on:
       - aki
     networks:
@@ -58,7 +56,8 @@ services:
       VNC_PASSWD: 111111
       COOLQ_ACCOUNT: 1647869577
       FORCE_ENV: "true"
-      CQHTTP_USE_HTTP: "false"
+      CQHTTP_HOST: "127.0.0.1"
+      CQHTTP_USE_HTTP: "true"  # 便于排错
       CQHTTP_ACCESS_TOKEN: BC9OhELAb0NJvjoqiXm6
       CQHTTP_USE_WS_REVERSE: "true"
       CQHTTP_WS_REVERSE_URL: ws://aki:8080/ws/
