@@ -6,7 +6,7 @@ ENABLE_HTTP_POST = False
 
 SUPERUSERS = {1002647525}
 
-DATABASE_URL = 'postgresql://postgres:bMmsDmrJP9hgCNH7hECy@db:5432/postgres'
+DATABASE_URL = 'postgresql://aki:bMmsDmrJP9hgCNH7hECy@db:5432/aki'
 
 MANUAL_IMAGE_URL_FORMAT = 'http://manual-image-server:8043/screenshots/{}.png'
 

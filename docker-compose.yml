@@ -11,6 +11,8 @@ services:
       - db:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: bMmsDmrJP9hgCNH7hECy
+      POSTGRES_USER: aki
+      POSTGRES_DB: aki
     ports:
       - 15000:5432
     restart: always
