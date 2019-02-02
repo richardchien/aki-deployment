@@ -1,0 +1,82 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:11.1
+    networks:
+      net:
+        aliases:
+          - db
+    volumes:
+      - db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: bMmsDmrJP9hgCNH7hECy
+      POSTGRES_USER: amadeus  # 历史原因，数据库和用户名没有改名
+      POSTGRES_DB: amadeus
+    ports:
+      - 15000:5432
+    restart: always
+
+  manual-image-server:
+    image: pierrezemb/gostatic
+    networks:
+      net:
+        aliases:
+          - manual-image-server
+    volumes:
+      - ./aki/src/manual:/srv/http
+    expose:
+      - 8043
+
+  aki:
+    build: ./aki
+    depends_on:
+      - db
+    networks:
+      net:
+        aliases:
+          - aki
+    volumes:
+      - ./wait-for-it.sh:/usr/src/app/wait-for-it.sh
+      - ./aki/config_prod.py:/usr/src/app/config_prod.py
+      - ./aki/alembic.ini:/usr/src/app/alembic.ini
+      - ./aki/data:/usr/src/app/data
+    command: ["./wait-for-it.sh", "db:5432", "--", "/usr/src/app/start.sh"]
+    restart: always
+
+  coolq:
+    image: richardchien/cqhttp:4.7.0
+    depends_on:
+      - aki
+    networks:
+      net:
+        aliases:
+          - coolq
+    volumes:
+      - ./coolq:/home/user/coolq
+    environment:
+      VNC_PASSWD: 111111
+      COOLQ_ACCOUNT: 1647869577
+      FORCE_ENV: "true"
+      CQHTTP_USE_HTTP: "false"
+      CQHTTP_ACCESS_TOKEN: BC9OhELAb0NJvjoqiXm6
+      CQHTTP_USE_WS_REVERSE: "true"
+      CQHTTP_WS_REVERSE_URL: ws://aki:8080/ws/
+      CQHTTP_WS_REVERSE_RECONNECT_INTERVAL: 1500
+      CQHTTP_WS_REVERSE_USE_UNIVERSAL_CLIENT: "true"
+      CQHTTP_THREAD_POOL_SIZE: 6
+      CQHTTP_SHOW_LOG_CONSOLE: "true"
+      CQHTTP_MAX_LOG_FILE_SIZE: 6291456
+      CQHTTP_MAX_LOG_FILES: 5
+      CQHTTP_LOG_LEVEL: info
+      CQHTTP_ENABLE_HEARTBEAT: "true"
+    ports:
+      - 15001:9000
+    restart: always
+
+networks:
+  net:
+    driver: bridge
+
+volumes:
+  db:
