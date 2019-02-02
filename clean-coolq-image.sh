@@ -1,0 +1,1 @@
+rm ./coolq/data/image/*
