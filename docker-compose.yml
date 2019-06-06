@@ -45,7 +45,7 @@ services:
     restart: always
 
   coolq:
-    image: richardchien/cqhttp:4.7.1
+    image: richardchien/cqhttp:4.10.1
     depends_on:
       - aki
     networks:
